@@ -40,8 +40,24 @@ const isAdmin = async (req, res, next) => {
             message: 'Not an Admin' });
     }
 }
+const isEmployee = async (req, res, next) => {
+    let token = req.headers['x-access-token'];
+    // console.log(req.employee_email);
+    const employee_email = req.employee_email;
+    const employee = await employeeService.getEmployeeByEmail(employee_email);
+    if (employee[0].company_role_id === 1) { // Assuming 3 is the admin role ID
+        next();
+        console.log("Customer created successfully");
+    } else {
+        // console.log("you are Not an Admin");
+        return res.status(403).send({ 
+            status:"fail",
+            message: 'Not an Employee' });
+    }
+}
 const authMiddleware = {
     verifyToken,
-    isAdmin
+    isAdmin,
+    isEmployee
 };
 module.exports = authMiddleware;

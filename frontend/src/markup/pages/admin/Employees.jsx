@@ -20,7 +20,7 @@ function Employees() {
               </div>
               <div className="col-md-9 admin-right-side">
                  <div className="d-flex justify-content-between align-items-center mb-3">
-                  <h2>Employee Management</h2>
+                  {/* <h2>Employee Management</h2> */}
                   <button className="btn btn-success" onClick={() => setShowAddModal(true)}>
                     + Add Employee
                   </button>

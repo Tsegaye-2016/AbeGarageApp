@@ -280,7 +280,7 @@ function AddEmployeeForm() {
       employee_last_name: '',
       employee_phone: '',
       employee_password: '',
-      company_role_id: '1',
+      company_role_id: '',
       active_employee: 1,
     },
   });
@@ -383,30 +383,29 @@ function AddEmployeeForm() {
             />
 
             {/* Role */}
-            <FormField
-              name="company_role_id"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Role</FormLabel>
-                  <Select
-                    value={field.value}
-                    onValueChange={field.onChange}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a role" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="1">Employee</SelectItem>
-                      <SelectItem value="2">Manager</SelectItem>
-                      <SelectItem value="3">Admin</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
+           <FormField
+            name="company_role_id"
+            control={form.control}
+            rules={{ required: 'Role is required' }}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Role</FormLabel>
+                <Select {...field} onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a role" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="1">Employee</SelectItem>
+                    <SelectItem value="2">Manager</SelectItem>
+                    <SelectItem value="3">Admin</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
             {/* Password */}
             <FormField

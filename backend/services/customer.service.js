@@ -16,6 +16,7 @@ async function checkIfCustomerExists(email) {
 //create a function to add new customer to the database
 async function createCustomer(customer) {
     let createdCustomer = {};
+    console.log(customer);
     try{
         const hash_id = crypto.randomUUID();
         const queryCustomer = "INSERT INTO customer_identifier (customer_email,customer_phone_number,customer_hash) VALUES (?,?,?)";
@@ -58,8 +59,57 @@ async function createCustomer(customer) {
 
     return createdCustomer;
 }
+//create function to get all customers
+async function getAllCustomres() {
+    const query = `SELECT * FROM customer_identifier INNER JOIN customer_info ON customer_identifier.customer_id = customer_info.customer_id ORDER BY customer_identifier.customer_id DESC limit 10`;
+    const rows = await conn.query(query);
+    return rows;
+}
+async function getCustomerIdByEmail(email) {
+    const query = "SELECT *FROM customer_identifier WHERE customer_id = ?";
+    const rows = await conn.query(query,[email]);
+    if (rows.length === 0) {
+    throw new Error('Customer not found');
+    }
+return rows[0].customer_id;
+}
+async function getCustomerName() {
+    const query = `SELECT customer_id, customer_first_name, customer_last_name FROM customer_info`;
+    const rows = await conn.query(query);
+    return rows;
+}
+async function updateCustomer(customer) {
+    try {
+        const customer_hash = customer.customer_hash;
+        const query = "SELECT * FROM customer_identifier WHERE customer_hash = ?";
+
+        const rows = await conn.query(query, [customer_hash]);
+
+        const customer_id = rows[0].customer_id;
+        const query1 = "UPDATE customer_identifier SET customer_email = ?, customer_phone_number = ? WHERE customer_id = ?";
+        const query2 = "UPDATE customer_info SET customer_first_name = ?, customer_last_name = ?, active_customer_status = ? WHERE customer_id = ?";
+        const rows1 = await conn.query(query1, [
+            customer.customer_email,
+            customer.customer_phone_number,
+            customer_id
+        ])
+        const rows2 = await conn.query(query2,[
+            customer.customer_first_name,
+            customer.customer_last_name,
+            customer.active_customer_status,
+            customer_id
+        ])
+        return {rows1,rows2};
+    } catch (error) {
+        console.log(error);
+    }
+}
 // export the checkIfCustomerExists function
 module.exports = { 
     checkIfCustomerExists,
-    createCustomer
+    createCustomer,
+    getAllCustomres,
+    getCustomerIdByEmail,
+    getCustomerName,
+    updateCustomer,
     };

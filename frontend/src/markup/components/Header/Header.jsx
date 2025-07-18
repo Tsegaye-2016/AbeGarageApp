@@ -47,7 +47,7 @@ function Header(props) {
                     </div>
                   </div>
                   <div className="right-column">
-                    <div className="nav-outer">
+                    {/* <div className="nav-outer">
                       <div className="mobile-nav-toggler"><img src="assets/images/icons/icon-bar.png" alt="" />
                       </div>
                       <nav className="main-menu navbar-expand-md navbar-light">
@@ -63,7 +63,22 @@ function Header(props) {
                           </ul>
                         </div>
                       </nav>
-                    </div>
+                    </div> */}
+                      {/* <div className="bg-white text-black px-4 py-2 shadow-md"> */}
+                        <div className="flex items-center justify-between">
+                          <div className="mobile-nav-toggler">
+                            <img src="assets/images/icons/icon-bar.png" alt="" />
+                          </div>
+
+                          <nav className="hidden md:flex space-x-6">
+                            <a href="/" className="text-black hover:text-blue-600">Home</a>
+                            <a href="/about" className="text-black hover:text-blue-600">About Us</a>
+                            <a href="/services" className="text-black hover:text-blue-600">Services</a>
+                            <a href="/contact" className="text-black hover:text-blue-600">Contact Us</a>
+                          </nav>
+                        </div>
+                      {/* </div> */}
+
                     <div className="search-btn"></div>
                     {/* <div className="link-btn"><a href="/login" className="theme-btn btn-style-one">Login</a></div> */}
 
