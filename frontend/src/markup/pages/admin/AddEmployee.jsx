@@ -2,7 +2,7 @@ import React from 'react'
 import AdminMenu from '../../components/Admin/AdminMenu/AdminMenu'
 import AddEmployeeForm from '../../components/Admin/AddEmployeeForm/AddEmployeeForm'
 
-function AddEmployee(props) {
+function AddEmployee() {
   return (
     <div>
           <div className="container-fluid admin-pages">

@@ -68,9 +68,15 @@ async function getEmployeeByEmail(employee_email) {
 async function getAllEmployees() {
   const query = `SELECT * FROM employee INNER JOIN employee_info ON employee.employee_id = 
   employee_info.employee_id INNER JOIN employee_role ON employee.employee_id = employee_role.employee_id 
-  INNER JOIN company_roles ON employee_role.company_role_id = company_roles.company_role_id ORDER BY employee.employee_id DESC limit 10`;
+  INNER JOIN company_roles ON employee_role.company_role_id = company_roles.company_role_id ORDER BY employee.employee_id DESC limit 100`;
   const rows = await conn.query(query);
   return rows;
+}
+async function getEmployeeName() {
+    const query = `SELECT employee_id, employee_first_name, employee_last_name FROM employee_info`;
+    const rows = await conn.query(query);
+    return rows;
+    
 }
 //export the function for use in the controller
 module.exports = {
@@ -78,4 +84,5 @@ module.exports = {
     createEmployee,
     getEmployeeByEmail,
     getAllEmployees,
+    getEmployeeName
 }

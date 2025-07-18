@@ -28,7 +28,7 @@ async function login(req, res,next) {
             employee_last_name: employee.data.employee_last_name,
             employee_phone: employee.data.employee_phone,
         }
-        const token = jwt.sign(payload, jwtSecret, { expiresIn: '1h' });
+        const token = jwt.sign(payload, jwtSecret, { expiresIn: '24h' });
         // console.log("Token generated:", token);
         // return the token and employee data to the client
         const sentBack = {

@@ -6,9 +6,9 @@ import AddEmployeeForm from '../components/Admin/AddEmployeeForm/AddEmployeeForm
 function AddEmployeeModal({ show, handleClose }) {
   return (
     <Modal show={show} onHide={handleClose} size="lg" backdrop="static">
-      <Modal.Header closeButton>
+      {/* <Modal.Header closeButton>
         <Modal.Title>Add New Employee</Modal.Title>
-      </Modal.Header>
+      </Modal.Header> */}
       <Modal.Body>
         <AddEmployeeForm />
       </Modal.Body>

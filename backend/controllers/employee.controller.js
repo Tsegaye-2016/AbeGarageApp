@@ -50,8 +50,23 @@ async function getAllEmployees(req, res, next) {
             });
         }
 }
+async function getEmployeeName(req,res,next) {
+    const employeeName = await employeeService.getEmployeeName();
+    if (!employeeName) {
+        res.status(400).json({
+            error: "Fail to get employees!"
+        });
+    } else {
+        res.status(200).json({
+            status: "success",
+            data: employeeName
+        });
+    }
+    
+}
 //export the add employee controller
 module.exports = {
     createEmployee,
-    getAllEmployees
+    getAllEmployees,
+    getEmployeeName
 }
