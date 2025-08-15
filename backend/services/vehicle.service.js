@@ -54,8 +54,42 @@ async function getVehicleSerial() {
   return rows;
   
 }
+async function updateVehicle(vehicles) {
+  try {
+    const vehicle = vehicles.vehicle_id;
+    const query = "SELECT *FROM customer_vehicle_info WHERE vehicle_id = ?";
+    const rows = await conn.query(query, [vehicle]);
+    const vehicle_id = rows[0].vehicle_id;
+    const query1 = "UPDATE customer_vehicle_info SET vehicle_year = ?, vehicle_make = ?, vehicle_model = ?, vehicle_type = ?, vehicle_mileage = ?, vehicle_tag = ?, vehicle_serial = ?, vehicle_color = ? WHERE vehicle_id = ?";
+    const rows1 = await conn.query(query1,[
+        vehicles.vehicle_year,
+        vehicles.vehicle_make,
+        vehicles.vehicle_model,
+        vehicles.vehicle_type,
+        vehicles.vehicle_mileage,
+        vehicles.vehicle_tag,
+        vehicles.vehicle_serial,
+        vehicles.vehicle_color,
+        vehicle_id
+    ]);
+    return {rows1};
+  } catch (error) {
+    console.log("Something went wrong",error);
+  }
+}
+async function countVehicle() {
+    try {
+      const query = "SELECT COUNT(*) as count FROM customer_vehicle_info";
+      const rows = await conn.query(query);
+      return rows[0].count;
+    } catch (error) {
+      console.log("Something went wrong",error);
+    }
+}
 module.exports = {
     addVehicles,
     getVehiclesByCustomerId,
-    getVehicleSerial
+    getVehicleSerial,
+    updateVehicle,
+    countVehicle
 };

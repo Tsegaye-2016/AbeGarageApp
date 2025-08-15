@@ -1,148 +1,91 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import logo from '../../../assets/imges/logo.png'
-// import the custom context hook to access the AuthContext
-import { useAuth } from '../../../Context/AuthContext.jsx';
-// import loginService
-import loginService from '../../../services/login.service.js';
-import { Link } from 'react-router-dom';
-function Header(props) {
-    // console.log("useAuth", useAuth());
-    const { isLogged, setIsLogged, employee } = useAuth();
+import { useAuth } from '../../../Context/AuthContext'
+import loginService from '../../../services/login.service'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid'
 
-    const handleLogout = () => {
-        loginService.logoutEmployee();
-        setIsLogged(false);
-    }
+function Header() {
+  const { isLogged, setIsLogged, employee } = useAuth()
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  const handleLogout = () => {
+    loginService.logoutEmployee()
+    setIsLogged(false)
+    setMenuOpen(false)
+  }
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen)
+  }
+
   return (
-    <div>
-          <header className="main-header header-style-one">
-            <div className="header-top">
-              <div className="auto-container">
-                <div className="inner-container">
-                  <div className="left-column">
-                    <div className="text">Enjoy the Beso while we fix your car</div>
-                    <div className="office-hour">Monday - Saturday 7:00AM - 6:00PM</div>
-                  </div>
-                  <div className="right-column">
-                    {/* <div className="phone-number">Schedule Your Appontment Today : <strong>1800 456 7890</strong>
-                    </div> */}
-                    {
-                      isLogged ? (
-                        <div className="link-btn">
-                          <div className="phone-number"><strong>Welcome {employee.employee_first_name}</strong></div>
-                        </div>
-                      ):(
-                        <div className="phone-number"> Schedule Your Appontment Today  :<strong>09 13 89 63 19</strong></div>
-                      )}
-    
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="header-upper">
-              <div className="auto-container">
-                <div className="inner-container">
-                  <div className="logo-box">
-                    <div className="logo"><a href="/"><img src={logo} alt="" /></a>
-                    </div>
-                  </div>
-                  <div className="right-column">
-                    {/* <div className="nav-outer">
-                      <div className="mobile-nav-toggler"><img src="assets/images/icons/icon-bar.png" alt="" />
-                      </div>
-                      <nav className="main-menu navbar-expand-md navbar-light">
-                        <div className="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
-                          <ul className="navigation">
-                            <li className="dropdown"><a href="/">Home</a>
-                            </li>
-                            <li className="dropdown"><a href="/about">About Us</a>
-                            </li>
-                            <li className="dropdown"><a href="/services">Services</a>
-                            </li>
-                            <li><a href="/contact">Contact Us</a></li>
-                          </ul>
-                        </div>
-                      </nav>
-                    </div> */}
-                      {/* <div className="bg-white text-black px-4 py-2 shadow-md"> */}
-                        <div className="flex items-center justify-between">
-                          <div className="mobile-nav-toggler">
-                            <img src="assets/images/icons/icon-bar.png" alt="" />
-                          </div>
-
-                          <nav className="hidden md:flex space-x-6">
-                            <a href="/" className="text-black hover:text-blue-600">Home</a>
-                            <a href="/about" className="text-black hover:text-blue-600">About Us</a>
-                            <a href="/services" className="text-black hover:text-blue-600">Services</a>
-                            <a href="/contact" className="text-black hover:text-blue-600">Contact Us</a>
-                          </nav>
-                        </div>
-                      {/* </div> */}
-
-                    <div className="search-btn"></div>
-                    {/* <div className="link-btn"><a href="/login" className="theme-btn btn-style-one">Login</a></div> */}
-
-                      {
-                        isLogged ? (
-                          <div className="link-btn">
-                            <Link to="/" className="theme-btn btn-style-one blue" onClick={handleLogout}>Logout</Link>
-                          </div>
-                        ) : (
-                          <div className="link-btn">
-                            <Link to="/login" className="theme-btn btn-style-one">Login</Link>
-                          </div>
-                        )
-                      }
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="sticky-header">
-              <div className="header-upper">
-                <div className="auto-container">
-                  <div className="inner-container">
-                    <div className="logo-box">
-                      <div className="logo"><a href="/"><img src="assets/images/custom/logo.png" alt="" /></a>
-                      </div>
-                    </div>
-                    <div className="right-column">
-                      <div className="nav-outer">
-                        <div className="mobile-nav-toggler"><img src="assets/images/icons/icon-bar.png" alt="" />
-                        </div>
-    
-                        <nav className="main-menu navbar-expand-md navbar-light">
-                        </nav>
-                      </div>
-                      <div className="search-btn"></div>
-                      <div className="link-btn">
-                        <a href="/login" className="theme-btn btn-style-one">Login</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="mobile-menu">
-              <div className="menu-backdrop"></div>
-              <div className="close-btn"><span className="icon flaticon-remove"></span></div>
-    
-              <nav className="menu-box">
-                <div className="nav-logo"><a href="index.html">
-                  <img src="assets/images/logo-two.png" alt=""
-                    title="" /></a></div>
-                <div className="menu-outer">
-    
-                </div>
-    
-              </nav>
-            </div>
-    
-            <div className="nav-overlay">
-              <div className="cursor"></div>
-              <div className="cursor-follower"></div>
-            </div>
-          </header>
+    <header className="sticky top-0 z-50 bg-white shadow-md">
+      {/* Top Bar */}
+      <div className="bg-gray-800 text-white text-sm py-2 px-4 flex justify-between items-center">
+        <div>
+          <span className="font-semibold text-yellow-400">Garage Management System</span> — Mon–Sat: 7:00AM – 6:00PM
         </div>
+        <div>
+          {isLogged ? (
+            <span>Welcome, <strong>{employee?.employee_first_name}</strong></span>
+          ) : (
+            <span>Schedule Appointment: <strong>09 13 89 63 19</strong></span>
+          )}
+        </div>
+      </div>
+
+      {/* Main Header */}
+      <div className="flex justify-between items-center px-6 py-4 bg-white">
+        {/* Logo */}
+        <Link to="/">
+          <img src={logo} alt="Garage Logo" className="h-12 w-auto" />
+        </Link>
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex gap-6 text-gray-800 font-medium">
+          <Link to="/admin" className="hover:text-blue-600">Dashboard</Link>
+          <Link to="/" className="hover:text-blue-600">Home</Link>
+          <Link to="/about" className="hover:text-blue-600">About Us</Link>
+          <Link to="/services" className="hover:text-blue-600">Services</Link>
+          <Link to="/contact" className="hover:text-blue-600">Contact Us</Link>
+        </nav>
+
+        {/* Login / Logout */}
+        <div className="hidden md:block">
+          {isLogged ? (
+            <Link to="/" onClick={handleLogout} className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">Logout</Link>
+          ) : (
+            <Link to="/login" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Login</Link>
+          )}
+        </div>
+
+        {/* Mobile Menu Icon */}
+        <div className="md:hidden" onClick={toggleMenu}>
+          {menuOpen ? (
+            <XMarkIcon className="h-8 w-8 text-gray-700 cursor-pointer" />
+          ) : (
+            <Bars3Icon className="h-8 w-8 text-gray-700 cursor-pointer" />
+          )}
+        </div>
+      </div>
+
+      {/* Mobile Navigation Menu */}
+      {menuOpen && (
+        <div className="md:hidden px-6 pb-4 space-y-3 bg-white border-t border-gray-200 shadow">
+          <Link to="/admin" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-blue-600">Dashboard</Link>
+          <Link to="/" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-blue-600">Home</Link>
+          <Link to="/about" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-blue-600">About Us</Link>
+          <Link to="/services" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-blue-600">Services</Link>
+          <Link to="/contact" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-blue-600">Contact Us</Link>
+          {isLogged ? (
+            <Link to="/" onClick={handleLogout} className="block bg-red-600 text-white px-4 py-2 rounded text-center hover:bg-red-700">Logout</Link>
+          ) : (
+            <Link to="/login" onClick={() => setMenuOpen(false)} className="block bg-blue-600 text-white px-4 py-2 rounded text-center hover:bg-blue-700">Login</Link>
+          )}
+        </div>
+      )}
+    </header>
   )
 }
 

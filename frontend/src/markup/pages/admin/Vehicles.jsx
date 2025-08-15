@@ -10,7 +10,7 @@ function Vehicles() {
     <div>
       <div className="container-fluid admin-pages">
             <div className="row">
-              <div className="col-md-3 admin-left-side">
+              <div className="col-md-2 admin-left-side">
                 <AdminMenu />
               </div>
 

@@ -108,9 +108,19 @@ async function getAllOrders() {
     throw error;
   }
 }
-
+async function getTotalOrders() {
+    try {
+      const query = "SELECT COUNT(*) as count FROM orders";
+      const rows = await conn.query(query);
+      return rows[0].count;
+    } catch (error) {
+      console.log("Something Went Wtong",error);
+    }
+  
+}
 
 module.exports = {
     createOrder,
-    getAllOrders
+    getAllOrders,
+    getTotalOrders,
 }

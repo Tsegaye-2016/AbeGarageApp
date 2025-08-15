@@ -24,7 +24,7 @@ import serviceService from '../../../../services/service.service';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
-function AddOrderForm() {
+function AddOrderForm({ handleClose, onOrderSaved }) {
   const { employee } = useAuth();
   const token = employee?.employeetoken;
 
@@ -108,7 +108,9 @@ function AddOrderForm() {
       } else {
         setSuccessMessage(true);
         setTimeout(() => {
-          window.location.href = '/admin/orders';
+          // window.location.href = '/admin/orders';
+          if (onOrderSaved) onOrderSaved(data); // update parent list
+        if (handleClose) handleClose();       // close modal
         }, 2000);
       }
     } catch (error) {

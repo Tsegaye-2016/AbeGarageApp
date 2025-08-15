@@ -82,10 +82,49 @@ async function updateCustomer(req, res, next) {
         });
     }
 }
+async function deleteCustomer(req, res, next) {
+    try {
+        const result = await customerService.deleteCustomer(req.body);
+
+        if (!result || !result.rows1 || !result.rows2) {
+            return res.status(400).json({ error: "Failed to delete the customer! Not found" });
+        }
+
+        const { rows1, rows2 } = result;
+
+        if (rows1.affectedRows === 1 && rows2.affectedRows === 1) {
+            return res.status(200).json({ status: "Customer successfully deleted!" });
+        } else {
+            return res.status(400).json({ status: "Delete incomplete!" });
+        }
+    } catch (error) {
+        console.error("Delete error:", error);
+        return res.status(500).json({ error: "Something went wrong!" });
+    }
+}
+async function getTotalCustomers(req, res, next) {
+    try {
+        const totalCustomers = await customerService.getTotalCustomers();
+        if(!totalCustomers){
+            res.status(400).json({
+                error:"Not Fetch The Customer"
+            });
+        }else{
+            res.status(200).json({
+                status:"Success",
+                data:totalCustomers
+            });
+        }
+    } catch (error) {
+        console.log("Somthing Went Wrong", error);
+    }
+}
 //export the createCustomer function
 module.exports = {
     createCustomer,
     getAllCustomres,
     getCustomerName,
-    updateCustomer
+    updateCustomer,
+    deleteCustomer,
+    getTotalCustomers
 }

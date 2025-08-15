@@ -1,10 +1,12 @@
 import React from 'react'
-
+import Contacts from '../components/Contacts/Contacts'
+import AboutUs3 from '../components/AboutUs/AboutUs3'
 function Contact() {
   return (
-    <div>
-      
-    </div>
+    <>
+      <Contacts />
+      <AboutUs3 />
+    </>
   )
 }
 

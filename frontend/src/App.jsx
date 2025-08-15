@@ -26,6 +26,9 @@ import EmployeesList from './markup/components/Admin/EmployeesList/EmployeesList
 import AddCustomerForm from './markup/components/Admin/AddCustomerForm/AddCustomerForm'
 import Vehicles from './markup/pages/admin/Vehicles'
 import ServiceList from './markup/pages/admin/ServiceList'
+import Dashboard from './markup/pages/admin/Dashboard'
+import AddAppointmentForm from './markup/components/Admin/AddAppointmentForm/AddAppointmentForm';
+import Appointments from './markup/pages/admin/Appointments';
 function App() {
 
   return (
@@ -34,10 +37,16 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/admin/appointment" element={<AddAppointmentForm />} />
       {/* <Route path="/admin/add-employee" element={<AddEmployee />} /> */}
       <Route path="/admin/add-employee" element={
         <PrivateAuthRoute roles={[3]}>
           <AddEmployee />
+        </PrivateAuthRoute>
+      } />
+       <Route path="/admin" element={
+        <PrivateAuthRoute roles={[3]}>
+          <Dashboard />
         </PrivateAuthRoute>
       } />
       <Route path="/admin/add-customer" element={
@@ -63,6 +72,11 @@ function App() {
       <Route path="/admin/customers" element={
         <PrivateAuthRoute roles={[1,2,3]}>
           <Customers />
+        </PrivateAuthRoute>
+      } />
+      <Route path="/admin/appointments" element={
+        <PrivateAuthRoute roles={[1,2,3]}>
+          <Appointments />
         </PrivateAuthRoute>
       } />
       <Route path="/admin/customers/:customer_id" element={

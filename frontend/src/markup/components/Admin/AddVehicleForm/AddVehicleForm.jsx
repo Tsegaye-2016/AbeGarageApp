@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { useForm } from 'react-hook-form';
 import {useAuth} from '../../../../Context/AuthContext';
 import {
@@ -14,7 +14,7 @@ import { Input } from '@/components/components/ui/input';
 import { Button } from '@/components/components/ui/button';
 import { useParams } from 'react-router-dom';
 import vehicleService from '../../../../services/vehicle.service';
-function AddVehicleForm() {
+function AddVehicleForm({vehicleData = null,onClose, onVehicleSaved}) {
     const {employee} = useAuth();
     const token = employee?.employeetoken || '';
     const [serverError, setServerError] = useState('');
@@ -34,6 +34,21 @@ function AddVehicleForm() {
             vehicle_color: '',
         }
     });
+    useEffect(() => {
+      if(vehicleData){
+        form.reset({
+          vehicle_id: vehicleData.vehicle_id,
+          vehicle_year: vehicleData.vehicle_year || '',
+          vehicle_make: vehicleData.vehicle_make || '',
+          vehicle_model: vehicleData.vehicle_model || '',
+          vehicle_type: vehicleData.vehicle_type || '',
+          vehicle_mileage: vehicleData.vehicle_mileage || '',
+          vehicle_tag: vehicleData.vehicle_tag || '',
+          vehicle_serial: vehicleData.vehicle_serial || '',
+          vehicle_color: vehicleData.vehicle_color || '',
+        })
+      }
+    },[vehicleData,form]);
     const onSubmit = async (formData) => {
         setServerError('');
         const payload = {
@@ -41,7 +56,13 @@ function AddVehicleForm() {
       customer_id: Number(customer_id),
     };
         try {
-            const response = await vehicleService.createVehicle(payload,token);
+            let response;
+            console.log('Vehicle tsegaye Data',vehicleData);
+            if(vehicleData?.vehicle_id){
+                response = await vehicleService.updateVehicle(payload,token);
+            }else{
+                response = await vehicleService.createVehicle(payload,token);
+            }
             const data = await response.json();
             if(data.error){
                 setServerError(data.error);
@@ -49,7 +70,7 @@ function AddVehicleForm() {
                 setSuccessMessage(true);
                 setTimeout(() => {
                     window.location.href = `/admin/customers/${customer_id}`;
-                }, 2000);
+                }, 500);
             }
         } catch (error) {
             const resMessage = error.response?.data?.message || error.message || error.toString();
@@ -60,12 +81,12 @@ function AddVehicleForm() {
   return (
     <section className="contact-section py-8">
           <div className="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow-md">
-            <h2 className="text-2xl font-semibold mb-6">Add a new Vehicle</h2>
+            <h2 className="text-2xl font-semibold mb-6">{vehicleData ? 'Update Vehicle' : 'Add Vehicle'}</h2>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                 {serverError && <p className="text-red-500">{serverError}</p>}
                 {successMessage && (
-                  <p className="text-green-600">Vehicle created successfully!</p>
+                  <p className="text-green-600">{vehicleData ? 'Vehicle updated ' : 'Vehicle added '} successfully</p>
                 )}
     
                 <FormField
@@ -172,7 +193,7 @@ function AddVehicleForm() {
                 />
     
                 <Button type="submit" className="w-full">
-                  Add Vehicle
+                  {vehicleData ? 'Update Vehicle' : 'Add Vehicle'}
                 </Button>
               </form>
             </Form>

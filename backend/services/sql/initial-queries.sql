@@ -1,3 +1,19 @@
+CREATE TABLE IF NOT EXISTS `appointments` (
+  `appointment_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
+  `vehicle_id` int(11) NOT NULL,
+  `service_id` int(11) NOT NULL,
+  `date` DATE,
+  `time_slot` VARCHAR(50),
+  `employee_id` int(11) NOT NULL,
+  `status` VARCHAR(20),
+  `notes` TEXT,
+  PRIMARY KEY (id),
+  FOREIGN KEY(customer_id) REFERENCES customer_identifier(customer_id),
+  FOREIGN KEY(vehicle_id) REFERENCES customer_vehicle_info(vehicle_id),
+  FOREIGN KEY(service_id) REFERENCES common_services(service_id),
+  FOREIGN KEY(employee_id) REFERENCES employee(employee_id)
+) ENGINE=InnoDB;
 -- Customers tables  
 CREATE TABLE IF NOT EXISTS `customer_identifier` (
   `customer_id` int(11) NOT NULL AUTO_INCREMENT,

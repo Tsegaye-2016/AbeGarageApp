@@ -16,4 +16,4 @@ async function query(sql, params) {
     return result;
 }
 // export the query function
-module.exports = { query };
+module.exports = { query, pool };
