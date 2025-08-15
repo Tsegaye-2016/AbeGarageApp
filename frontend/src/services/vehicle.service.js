@@ -25,9 +25,28 @@ const getVehicleSerial = async(token) =>{
         const response = await fetch(`${api_url}/api/vehicle_serial`,requestOptions);
         return response;
 }
+const updateVehicle = async (formData,loggedInEmployeeToken)=>{
+    const requestOptions ={
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json','x-access-token':loggedInEmployeeToken},
+        body: JSON.stringify(formData)
+    };
+    const response = await fetch(`${api_url}/api/vehicle/update`, requestOptions);
+    return response;
+}
+const countVehicle = async () => {
+    const requestOptions = {
+        method:'GET',
+        headers: { 'Content-Type': 'application/json' }
+    }
+    const response = await fetch(`${api_url}/api/vehicle/total_vehicle`,requestOptions);
+    return response;
+}
 export const vehicleService = {
     createVehicle,
     getVehicles,
-    getVehicleSerial
+    getVehicleSerial,
+    updateVehicle,
+    countVehicle
 }
 export default vehicleService;

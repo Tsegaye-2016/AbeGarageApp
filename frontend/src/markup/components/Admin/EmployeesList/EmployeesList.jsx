@@ -19,19 +19,21 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAuth } from '../../../../Context/AuthContext';
 import employeeService from '../../../../services/employee.service';
+import AddEmployeeModal from '../../../ModalComponent/AddEmployeeModal';
 
 function EmployeesList() {
   const [employees, setEmployees] = useState([]);
   const [apiError, setApiError] = useState(false);
   const [apiErrorMessage, setApiErrorMessage] = useState('');
   const {   employee } = useAuth();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   // Pagination
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  useEffect(() => {
-    const token = employee?.employeetoken;
+const fetchEmployees = async () => {
+     const token = employee?.employeetoken;
     console.log(token);
     if (!token) {
       setApiError(true);
@@ -60,8 +62,18 @@ function EmployeesList() {
       .catch((err) => {
         console.error('Fetch error:', err);
       });
+}
+  useEffect(() => {
+    fetchEmployees();
   }, [employee]);
-
+  const handleEdit = (employee) =>{
+    setSelectedEmployee(employee);
+    setShowModal(true);
+  }
+  const handleEmployeedSaved = async () =>{
+        await fetchEmployees();
+        setShowModal(false);
+  }
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
@@ -77,6 +89,13 @@ function EmployeesList() {
   }
 
   return (
+    <Box>
+      <AddEmployeeModal
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        employeeData={selectedEmployee}
+        onEmployeeSaved={handleEmployeedSaved}
+      />
     <Paper sx={{ width: '100%', overflow: 'hidden', mt: 4 }}>
       <Typography variant="h6" sx={{ p: 2 }}>
         Employees List
@@ -109,7 +128,7 @@ function EmployeesList() {
                     <TableCell>{emp.added_date}</TableCell>
                     <TableCell>{emp.company_role_name}</TableCell>
                     <TableCell align="center">
-                      <IconButton color="primary" size="small">
+                      <IconButton color="primary" size="small" onClick={() => handleEdit(emp)}>
                         <EditIcon fontSize="inherit" />
                       </IconButton>
                       <IconButton color="error" size="small">
@@ -139,6 +158,7 @@ function EmployeesList() {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
+    </Box>
   );
 }
 

@@ -78,11 +78,54 @@ async function getEmployeeName() {
     return rows;
     
 }
+async function updateEmployee(employees) {
+    try {
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(employees.employee_password, salt);
+        const employee = employees.employee_id;
+        const query = "SELECT *FROM employee WHERE employee_id = ?";
+        const rows = await conn.query(query,[employee]);
+        // console.log("rows on employee ",rows);
+        const employee_id = rows[0].employee_id;
+        const query1 = "UPDATE employee SET employee_email = ? WHERE employee_id = ?";
+        const query2 = "UPDATE employee_info SET employee_first_name = ?, employee_last_name = ?, employee_phone = ? WHERE employee_id = ?";
+        const query3 = "UPDATE employee_pass SET employee_password_hashed = ? WHERE employee_id = ?";
+        const rows1 = await conn.query(query1,[
+            employees.employee_email,
+            employee_id
+        ]);
+        const rows2 = await conn.query(query2,[
+            employees.employee_first_name,
+            employees.employee_last_name,
+            employees.employee_phone,
+            employee_id
+        ]);
+        const rows3 = await conn.query(query3,[
+            hashedPassword,
+            employee_id
+        ]);
+        return {rows1,rows2,rows3};
+    } catch (error) {
+        console.log("Tsegaye Something went wrong",error);
+    }
+}
+async function getTotalEmployee() {
+    try {
+        const query = "SELECT COUNT(*) as count FROM employee";
+        const rows = await conn.query(query);
+        return rows[0].count;
+    } catch (error) {
+        console.log("Something Went Wrong",error);
+    }
+}
 //export the function for use in the controller
 module.exports = {
     checkIfEmployeeExists,
     createEmployee,
     getEmployeeByEmail,
     getAllEmployees,
-    getEmployeeName
+    getEmployeeName,
+    updateEmployee,
+    getTotalEmployee,
 }

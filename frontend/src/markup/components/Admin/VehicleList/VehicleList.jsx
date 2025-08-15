@@ -18,7 +18,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import {useAuth} from '../../../../Context/AuthContext';
 import vehicleService from '../../../../services/vehicle.service';
 import { useParams } from 'react-router-dom';
-
+import AddVehicleModal from '../../../ModalComponent/AddVehicleModal';
 function VehicleList() {
     const [vehicles,setVehicles]= useState([]);
     const {apiError, setApiError}= useState(false);
@@ -28,9 +28,10 @@ function VehicleList() {
      //pagination 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-
-    useEffect(() =>{
-        const token = employee?.employeetoken;
+    const [showModal, setShowModal] = useState(false);
+    const [selectedVehicle, setSelectedVehicle] = useState(null);
+    const fetchVehicles = async () => {
+      const token = employee?.employeetoken;
         if (!customer_id || !token) return;
         vehicleService.getVehicles(customer_id,token)
         .then((res) =>{
@@ -54,8 +55,19 @@ function VehicleList() {
         .catch((error) => {
             console.error('API error:', error);
         });
+    }
+    useEffect(() =>{
+        fetchVehicles();
     },[employee]);
+    const handleEdit = (vehicle) => {
+        setSelectedVehicle(vehicle);
+        setShowModal(true);
+    }
 
+    const handleVehicleOnSaved = async () => {
+        await fetchVehicles();
+        setShowModal(false);
+    }
         const handleChangePage = (event, newPage) => setPage(newPage);
         const handleChangeRowsPerPage = (event) =>{
           setRowsPerPage(+event.target.value);
@@ -69,6 +81,13 @@ function VehicleList() {
             );
           }
   return (
+    <Box>
+      <AddVehicleModal 
+          show = {showModal}
+          handleClose = {() => setShowModal(false)}
+          vehicleData = {selectedVehicle}
+          onVehicleSaved = {() => handleVehicleOnSaved(false)}
+      />
     <Paper sx={{ width: '100%', overflow: 'hidden', mt: 4 }}>
       <Typography variant="h6" sx={{ p: 2 }}>
         Vehicle List
@@ -107,7 +126,7 @@ function VehicleList() {
                     <TableCell>{vehicle.vehicle_serial}</TableCell>
                     <TableCell>{vehicle.vehicle_color}</TableCell>
                     <TableCell align="center">
-                      <IconButton color="primary" size="small">
+                      <IconButton color="primary" size="small" onClick={() => handleEdit(vehicle)}>
                         <EditIcon fontSize="inherit" />
                       </IconButton>
                       <IconButton color="error" size="small">
@@ -137,6 +156,7 @@ function VehicleList() {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
+    </Box>
   )
 }
 

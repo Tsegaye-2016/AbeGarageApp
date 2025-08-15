@@ -16,6 +16,8 @@ const loginRouter = require('./login.routes');
 const orderRouter = require('./order.routes');
 //import service router
 const serviceRouter = require('./service.routes');
+const appointmentRouter = require('./appointment.routes');
+router.use(appointmentRouter);
 // add the install router to the main router
 router.use(installRouter);
 // add the employee router to the main router

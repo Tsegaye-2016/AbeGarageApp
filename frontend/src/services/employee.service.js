@@ -50,10 +50,29 @@ const getEmployeeName = async(token) => {
     const response = await fetch(`${api_url}/api/employeess`, requestOptions);
     return response;
 }
+const updateEmployee = async (formData,loggedInToken) => {
+    const requestOptions ={
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json','x-access-token':loggedInToken},
+        body: JSON.stringify(formData)
+    };
+    const response = await fetch(`${api_url}/api/employee/update`, requestOptions);
+    return response;
+}
+const getTotalEmployee = async () =>{
+    const requestOptions ={
+        method:"GET",
+        headers:{'Content-Type': 'application/json'}
+    }
+    const response = await fetch(`${api_url}/api/employee/total_employees`,requestOptions);
+    return response;
+}
 //Export the createEmployee function
 export const employeeService = {
     createEmployee,
     getAllEmployees,
     getEmployeeName,
+    updateEmployee,
+    getTotalEmployee
 };
 export default employeeService;

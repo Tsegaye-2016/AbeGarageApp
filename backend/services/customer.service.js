@@ -1,5 +1,6 @@
 // import the query function from the db.config.js file
 const conn = require('../config/db.config.js');
+const {pool} = require('../config/db.config.js');
 // import the crypto module to generate random id
 const crypto = require('crypto');
 // create a function to check if customer email is already exist in the database
@@ -104,6 +105,53 @@ async function updateCustomer(customer) {
         console.log(error);
     }
 }
+async function deleteCustomer(customer) {
+    const connection = await pool.getConnection();
+    try {
+        await connection.beginTransaction();
+
+        const [rows] = await connection.query(
+            "SELECT customer_id FROM customer_identifier WHERE customer_hash = ?",
+            [customer.customer_hash]
+        );
+
+        if (rows.length === 0) {
+            throw new Error("Customer not found");
+        }
+
+        const customer_id = rows[0].customer_id;
+
+        const [rows1] = await connection.query(
+            "DELETE FROM customer_info WHERE customer_id = ?",
+            [customer_id]
+        );
+
+        const [rows2] = await connection.query(
+            "DELETE FROM customer_identifier WHERE customer_id = ?",
+            [customer_id]
+        );
+
+        await connection.commit();
+
+        return { rows1, rows2 };
+
+    } catch (err) {
+        await connection.rollback();
+        throw err;
+    } finally {
+        connection.release();
+    }
+}
+async function getTotalCustomers() {
+    try {
+        const query = "SELECT COUNT(*) as count FROM customer_identifier";
+        const rows = await conn.query(query);
+        return rows[0].count;
+        
+    } catch (error) {
+        console.log("Something Went Wrong", error);
+    }
+}
 // export the checkIfCustomerExists function
 module.exports = { 
     checkIfCustomerExists,
@@ -112,4 +160,6 @@ module.exports = {
     getCustomerIdByEmail,
     getCustomerName,
     updateCustomer,
+    deleteCustomer,
+    getTotalCustomers,
     };

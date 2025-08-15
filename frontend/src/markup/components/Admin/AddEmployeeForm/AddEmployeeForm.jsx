@@ -243,7 +243,7 @@
 
 // export default AddEmployeeForm
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import employeeService from '../../../../services/employee.service';
 import { useAuth } from '../../../../Context/AuthContext';
@@ -267,7 +267,7 @@ import {
   SelectItem,
 } from '@/components/components/ui/select';
 
-function AddEmployeeForm() {
+function AddEmployeeForm({employeeData = null, onClose, onEmployeeSaved}) {
   const { employee } = useAuth();
   const token = employee?.employeetoken || '';
   const [serverError, setServerError] = useState('');
@@ -284,11 +284,27 @@ function AddEmployeeForm() {
       active_employee: 1,
     },
   });
-
+  useEffect(() => {
+    if(employeeData){
+      form.reset({
+        employee_id: employeeData.employee_id,
+        employee_email: employeeData.employee_email || '',
+        employee_first_name: employeeData.employee_first_name || '',
+        employee_last_name: employeeData.employee_last_name  || '',
+        employee_phone: employeeData.employee_phone || '',
+        employee_password: employeeData.employee_password || '',
+      })
+    }
+  }, [employeeData, form]);
   const onSubmit = async (formData) => {
     setServerError('');
     try {
-      const response = await employeeService.createEmployee(formData, token);
+      let response;
+      if (employeeData?.employee_id) {
+        response = await employeeService.updateEmployee(formData, token);
+      } else {
+        response = await employeeService.createEmployee(formData, token);
+      }
       const data = await response.json();
 
       if (data.error) {
@@ -297,7 +313,7 @@ function AddEmployeeForm() {
         setSuccessMessage(true);
         setTimeout(() => {
           window.location.href = '/admin/employees';
-        }, 2000);
+        }, 500);
       }
     } catch (error) {
       const resMessage =
@@ -309,12 +325,12 @@ function AddEmployeeForm() {
   return (
     <section className="contact-section py-8">
       <div className="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow-md">
-        <h2 className="text-2xl font-semibold mb-6">Add a new employee</h2>
+        <h2 className="text-2xl font-semibold mb-6">{employeeData ? 'Update Employee' : 'Add a new employee'}</h2>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             {serverError && <p className="text-red-500">{serverError}</p>}
             {successMessage && (
-              <p className="text-green-600">Employee created successfully!</p>
+              <p className="text-green-600">{employeeData ? 'Employee updated ' : 'Employee added '} successfully</p>
             )}
 
           {/* First Name */}
@@ -386,7 +402,6 @@ function AddEmployeeForm() {
            <FormField
             name="company_role_id"
             control={form.control}
-            rules={{ required: 'Role is required' }}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Role</FormLabel>
@@ -430,7 +445,7 @@ function AddEmployeeForm() {
             />
 
             <Button type="submit" className="w-full">
-              Add Employee
+              {employeeData ? 'Update ' : 'Add '} Employee
             </Button>
           </form>
         </Form>

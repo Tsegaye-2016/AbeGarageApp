@@ -61,8 +61,50 @@ async function getVehicleSerial(req, res) {
         });
     }
 }
+async function updateVehicle(req, res, next) {
+    try {
+        const updateVehicle = await vehicleService.updateVehicle(req.body);
+        const rows = updateVehicle.rows1.affectedRows;
+        if (!updateVehicle) {
+            res.status(400).json({
+                error: "Failed to update the vehicle! not found",
+            });
+        } else if (rows === 1) {
+            res.status(200).json({
+                status: "Vehicle Successful Updated!",
+            });
+        } else {
+            res.status(400).json({
+                status: "Update Incomplete!",
+            });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    
+}
+async function countVehicle(req, res, next) {
+    try {
+        const countVehicle = await vehicleService.countVehicle();
+        if(!countVehicle) {
+            res.status(400).json({
+                error: "Fail to get vehicle serial!"
+            });
+        } else {
+            res.status(200).json({
+                status: "success",
+                data: countVehicle
+            });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    
+}                   
 module.exports = {
     addVehicles,
     getVehiclesByCustomerId,
-    getVehicleSerial
+    getVehicleSerial,
+    updateVehicle,
+    countVehicle
 };

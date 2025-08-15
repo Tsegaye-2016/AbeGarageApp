@@ -38,10 +38,29 @@ const updateCustomer = async (formData,loggedInEmployeeToken)=>{
     const response = await fetch(`${api_url}/api/customer/update`, requestOptions);
     return response;
 }
+const deleteCustomer = async (formData,loggedInEmployeeToken)=>{
+    const requestOptions ={
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json','x-access-token':loggedInEmployeeToken},
+        body: JSON.stringify(formData)
+    };
+    const response = await fetch(`${api_url}/api/customer/delete`, requestOptions);
+    return response;
+}
+const getTotalCustomers = async () => {
+    const requestOptions ={
+        method: 'GET',
+        headers:{'Content-Type': 'application/json'}
+    };
+    const response = await fetch(`${api_url}/api/customer/total_customers`);
+    return response;
+}
 export const customerService = {
     createCustomer,
     getCustomers,
     getCustomerName,
-    updateCustomer
+    updateCustomer,
+    deleteCustomer,
+    getTotalCustomers,
 }
 export default customerService;

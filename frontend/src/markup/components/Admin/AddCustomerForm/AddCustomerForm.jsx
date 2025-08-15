@@ -64,10 +64,11 @@ function AddCustomerForm({ customerData = null, onClose, onCustomerSaved }) {
       } else {
         setSuccessMessage(true);
         if (onCustomerSaved) {
-          onCustomerSaved(); // Refresh customer list
+          console.log('Calling onCustomerSaved...');
+          await onCustomerSaved(); // Refresh customer list
         }
         if (onClose) {
-          setTimeout(onClose, 1000); // Delay close to show success message
+          setTimeout(onClose, 500); // Delay close to show success message
         }
       }
 

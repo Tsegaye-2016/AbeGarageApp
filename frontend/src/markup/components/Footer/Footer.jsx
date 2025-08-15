@@ -33,7 +33,7 @@ function Footer(props) {
                   <div className="icon">
                     <span className="flaticon-phone"></span>
                   </div>
-                  <div className="text">Call us on : <br /><strong>+ 1800 456 7890</strong></div>
+                  <div className="text">Call us on : <br /><strong>+251900000000</strong></div>
                 </div>
               </div>
             </div>
@@ -104,7 +104,7 @@ function Footer(props) {
       </div>
       <div className="auto-container">
         <div className="footer-bottom">
-          <div className="copyright-text">© Copyright <a href="#">Abe Garage</a> 2023 . All right reserved.</div>
+          <div className="copyright-text">© Copyright <a href="#">Abe Garage</a> 2025 . All right reserved.</div>
         </div>
       </div>
     </footer>

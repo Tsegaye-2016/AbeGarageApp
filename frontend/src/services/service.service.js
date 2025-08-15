@@ -17,9 +17,28 @@ const getAllServices = async(token) => {
     const response = await fetch(`${api_url}/api/services`, requestOptions);
     return response;
 }
-
+const updateService = async (formData,loggedInEmployeeToken)=>{
+    const requestOptions ={
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json','x-access-token':loggedInEmployeeToken},
+        body: JSON.stringify(formData)
+    };
+    const response = await fetch(`${api_url}/api/service/update`, requestOptions);
+    return response;
+}
+const deleteService = async(formData,loggedInEmployeeToken) => {
+    const requestOptions ={
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json','x-access-token':loggedInEmployeeToken},
+        body: JSON.stringify(formData)
+    };
+    const response = await fetch(`${api_url}/api/service/delete`, requestOptions);
+    return response;
+}
 export const serviceService = {
     createServices,
-    getAllServices
+    getAllServices,
+    updateService,
+    deleteService
 }
 export default serviceService;

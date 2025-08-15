@@ -10,5 +10,7 @@ router.post('/api/customer',customerController.createCustomer);
 router.get('/api/customers',customerController.getAllCustomres);
 router.get('/api/customerss',customerController.getCustomerName);
 router.put('/api/customer/update',customerController.updateCustomer);
+router.post('/api/customer/delete',customerController.deleteCustomer);
+router.get('/api/customer/total_customers',customerController.getTotalCustomers);
 // export the router
 module.exports = router;

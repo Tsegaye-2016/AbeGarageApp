@@ -38,7 +38,25 @@ async function getAllOrders(req,res,next) {
         });
     }
 }
+async function getTotalOrders(req, res, next) {
+    try {
+        const totalOrders = await orderService.getTotalOrders();
+        if(!totalOrders){
+            res.status(400).json({
+                error:"Failed To Get The Total Orders!"
+            });
+        }else{
+            res.status(200).json({
+                status:"Success",
+                data:totalOrders
+            })
+        }
+    } catch (error) {
+        console.log("Something Went Wrong",error);
+    }
+}
 module.exports = {
     createOrder,
-    getAllOrders
+    getAllOrders,
+    getTotalOrders,
 }
