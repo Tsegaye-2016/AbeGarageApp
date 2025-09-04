@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import CountUp from 'react-countup';
 
-function Card({ title, value, icon: Icon, color }) {
+function Card({ title, value, icon: Icon, color , onClick}) {
   const colorMap = {
     blue: {
       bg: 'bg-blue-100',
@@ -34,6 +34,7 @@ function Card({ title, value, icon: Icon, color }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
+      onClick={onClick}
     >
       <div className="flex items-center gap-4">
         {Icon && (

@@ -6,6 +6,7 @@ import {
   ClipboardDocumentListIcon,
   UserGroupIcon,
   UserIcon,
+  CalendarDaysIcon,
 } from '@heroicons/react/24/outline';
 import Card from './Cards/Card';
 import OrderCharts from './Charts/OrderCharts';
@@ -14,7 +15,9 @@ import vehicleService from '../../../services/vehicle.service';
 import orderService from '../../../services/order.service';
 import customerService from '../../../services/customer.service';
 import employeeService from '../../../services/employee.service';
+import appointmentService from '../../../services/appointment.service';
 import { useAuth } from '../../../Context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 const monthlyOrders = [
   { month: 'Jan', orders: 10 },
   { month: 'Feb', orders: 20 },
@@ -43,9 +46,30 @@ function Dashboard() {
     const [totalOrders, setTotalOrders] = useState(0);
     const [totalCustomer, setTotalCustomers] = useState(0);
     const [totalEmployee, setTotalEmployee] = useState(0);
+    const [totalAppointments, setTotalAppointments] = useState(0);
     const {apiError, setApiError}= useState(false);
     const {apiErrorMessage, setApiErrorMessage}= useState('');
         const {employee} = useAuth();
+    const navigate = useNavigate();
+    const handleClicked = () => {
+        navigate('/admin/appointments');
+    }
+    const fetchAppointments = async () => {
+      try {
+        const res = await appointmentService.countAppointment();
+        if (!res.ok) {
+          setApiError(true);
+          if (res.status === 401) setApiErrorMessage('Please Login again');
+          else if (res.status === 403) setApiErrorMessage('Not authorized');
+          else setApiErrorMessage('Something went wrong');
+          throw new Error('API error');
+        }
+        const data = await res.json();
+        setTotalAppointments(data.data);
+      } catch (error) {
+        console.log("Something Went Wrong", error);
+      }
+    }
     const fetchTotalVehicles = async () => {
       try {
         const res = await vehicleService.countVehicle();
@@ -121,6 +145,7 @@ function Dashboard() {
       fetchTotalOrders();
       fetchTotalCustomers();
       fetchTotalEmployees();
+      fetchAppointments();
     },[employee]);
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -140,6 +165,9 @@ function Dashboard() {
       <Card title="Total Orders" value={totalOrders} icon={ClipboardDocumentListIcon} color="red" />
       <Card title="Total Customers" value={totalCustomer} icon={UserGroupIcon} color="blue" />
       <Card title="Total Employees" value={totalEmployee} icon={UserIcon} color="green" />
+      <Card title="Total Appointments" value={totalAppointments} icon={CalendarDaysIcon} color="orange" onClick={handleClicked} />
+      <Card title="Pending Appointments" value="5" icon={CalendarDaysIcon} color="yellow" />
+      <Card title="Completed Appointments" value="20" icon={CalendarDaysIcon} color="teal" />
     </div>
 
       <div className="flex flex-col lg:flex-row gap-6">

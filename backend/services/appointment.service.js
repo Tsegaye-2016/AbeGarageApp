@@ -1,5 +1,6 @@
 const conn = require('../config/db.config.js');
 async function createAppointment(appointment) {
+    let createdAppointment = {};
     try {
         const queryAppo = "INSERT INTO appointments (customer_id,vehicle_id,service_id,date,time_slot,employee_id,status,notes) VALUES(?,?,?,?,?,?,?,?)";
         const appointRows = await conn.query(
@@ -18,10 +19,22 @@ async function createAppointment(appointment) {
         if(appointRows.affectedRows !== 1){
             return false;
         }
-        return true;
+        // return true;
+        createdAppointment = {
+            id: appointRows.insertId,
+            // customer_id: appointment.customer_id,
+            // vehicle_id: appointment.vehicle_id,
+            // service_id: appointment.service_id,
+            // date: appointment.date,
+            // time_slot: appointment.time_slot,
+            // employee_id: appointment.employee_id,
+            // status: appointment.status,
+            // notes: appointment.notes
+        };
     } catch (error) {
         console.log("Something Went Wrong",error);
     }
+    return createdAppointment;
 }
 async function getAllAppointment() {
     try {
@@ -40,12 +53,12 @@ async function updateAppointment(appointment) {
         const rows = await conn.query(query, [appoint]);
 
         const id = rows[0].id;
-        const updateQuery = "UPDATE appointments SET customer_id = ?, vehicle_id = ?, service_id = ?, date = ?, time_slot = ?, employee_id = ?, status = ?, notes = ? WHERE id = ?";
+        const updateQuery = "UPDATE appointments SET customer_id = ?, vehicle_id = ?, service_id = ?, time_slot = ?, employee_id = ?, status = ?, notes = ? WHERE id = ?";
         const rows1 = await conn.query(updateQuery, [
             appointment.customer_id,
             appointment.vehicle_id,
             appointment.service_id,
-            appointment.date,
+            // appointment.date,
             appointment.time_slot,
             appointment.employee_id,
             appointment.status,
@@ -59,8 +72,20 @@ async function updateAppointment(appointment) {
     }
     
 }
+async function countAppointment() {
+    try {
+        const query = "SELECT COUNT(*) as total FROM appointments";
+        const rows = await conn.query(query);
+        return rows[0].total;
+
+    } catch (error) {
+        console.error('Error in countAppointment:', error.message);
+    }
+    
+}
 module.exports ={
     createAppointment,
     getAllAppointment,
-    updateAppointment
+    updateAppointment,
+    countAppointment
 }

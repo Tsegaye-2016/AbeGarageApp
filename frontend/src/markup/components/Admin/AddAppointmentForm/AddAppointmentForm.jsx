@@ -93,7 +93,7 @@ function AddAppointmentForm({appointmentData = null,handleClose,onAppointmentSav
           customer_id: appointmentData.customer_id || '',
           vehicle_id: appointmentData.vehicle_id || '',
           service_id: appointmentData.service_id || '',
-          date: appointmentData.date || '',
+          // date: appointmentData.date || '',
           time_slot: appointmentData.time_slot || '',
           employee_id: appointmentData.employee_id || '',
           status: appointmentData.status || '',

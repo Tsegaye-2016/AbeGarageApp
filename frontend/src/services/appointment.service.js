@@ -26,9 +26,18 @@ const updateAppointment = async (formData) => {
     const response = await fetch(`${api_url}/api/appointment/update`,requestOptions);
     return response;
 }
+const countAppointment = async () => {
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    };
+    const response = await fetch(`${api_url}/api/appointment/total_appointments`, requestOptions);
+    return response;
+}
 export const appointmentService ={
     createAppointment,
     getAllAppointment,
-    updateAppointment
+    updateAppointment,
+    countAppointment
 }
 export default appointmentService;
