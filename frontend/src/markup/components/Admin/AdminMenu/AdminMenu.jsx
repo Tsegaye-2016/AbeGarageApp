@@ -24,16 +24,16 @@ function AdminMenu() {
 
   return (
     <motion.div
-      className="w-full max-w-sm p-6 bg-white shadow-2xl rounded-xl mx-auto mt-10"
+      className="w-full max-w-sm p-6 bg-white shadow-2xl rounded-xl sticky top-0 h-full"
       // initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      // transition={{ duration: 0.4, ease: "easeOut" }}
     >
       <motion.h2
         className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2"
         // initial={{ x: -20, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        transition={{ delay: 0.1, duration: 0.3 }}
+        // transition={{ delay: 0.1, duration: 0.3 }}
       >
         Admin Menu
       </motion.h2>

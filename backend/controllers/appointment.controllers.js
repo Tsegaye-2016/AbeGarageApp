@@ -57,8 +57,29 @@ async function updateAppointment(req, res, next) {
         console.log(error);
     }
 }
+async function countAppointment(req, res, next) {
+    try {
+        const countAppoint = await appointmentService.countAppointment();
+        if(!countAppoint) {
+            res.status(400).json({
+                error: "Fail to get appointment count!"
+            });
+        } else {
+            res.status(200).json({
+                status: "success",
+                data: countAppoint
+            });
+        }
+    } catch (error) {
+        console.log('Error in counting appointments:', error);
+        res.status(500).json({
+            error: 'Internal server error'
+        });
+    }
+}
 module.exports ={
     createAppointment,
     getAllAppointment,
-    updateAppointment
+    updateAppointment,
+    countAppointment
 }

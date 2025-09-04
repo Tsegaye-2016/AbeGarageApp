@@ -5,7 +5,7 @@ function AddAppointmentModal({ show, handleClose, appointmentData, onAppointment
   return (
     <Modal show={show} onHide={handleClose} size="lg" backdrop="static">
       {/* <Modal.Header closeButton>
-        <Modal.Title>{customerData ? "Update Customer" : "Add Customer"}</Modal.Title>
+        <Modal.Title>{appointmentData ? "Update Appointment" : "Add Appointment"}</Modal.Title>
       </Modal.Header> */}
       <Modal.Body>
         <AddAppointmentForm

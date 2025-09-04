@@ -32,9 +32,6 @@ function AppointmentList() {
            console.log(error); 
         }
     }
-    useEffect(() => {
-        fetchAppointments();
-    }, []);
 
      const handleEdit = (appointment) => {
       console.log('Editing appointment:', appointment);
@@ -43,8 +40,8 @@ function AppointmentList() {
   };
 
   const handleAppointmentSaved = async () => {
-  setPage(0); 
-  await fetchAppointments();       
+  await fetchAppointments();
+  setPage(0);        
   setShowModal(false);         
   };
      const handleChangePage = (event, newPage) => setPage(newPage);
@@ -57,14 +54,17 @@ function AppointmentList() {
         return <Box sx={{ p: 4 }}><Alert severity="error">{apiErrorMessage}</Alert></Box>;
       }
     
+    useEffect(() => {
+        fetchAppointments();
+    }, []);
   return (  
     
     <Box>
       <AddAppointmentModal
         show={showModal}
         handleClose={() => setShowModal(false)}
-        customerData={selectedAppointment}
-        onCustomerSaved={handleAppointmentSaved}
+        appointmentData={selectedAppointment}
+        onAppointmentSaved={handleAppointmentSaved}
       />
 
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
